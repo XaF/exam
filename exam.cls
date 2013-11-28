@@ -4,6 +4,7 @@
 
 %% exam.cls
 %% Copyright (c) 1994, 1997, 2000, 2004, 2008 Philip S. Hirschhorn
+%% Copyright (c) 2013 Raphaël Beamonte <raphael.beamonte@gmail.com>
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -31,8 +32,8 @@
 % from my web page: http://www-math.mit.edu/~psh/
 
 
-\def\fileversion{2.4}
-\def\filedate{2011/05/22}
+\def\fileversion{2.401}
+\def\filedate{2013/11/27}
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 % 
@@ -84,6 +85,13 @@
 %--------------------------------------------------------------------
 %                    Changelog since version 2.3:
 
+%--------------------------------------------------------------------
+% Version 2.401, 2013/11/27:
+%
+% Change the use of plural and singular for the points name as
+% '1 and a half point' should stay singular. Plural now starts
+% from 2.
+%
 %--------------------------------------------------------------------
 % Version 2.4, 2011/05/22:
 %
@@ -547,6 +555,7 @@
   Philip Hirschhorn]
 
 \RequirePackage{ifthen}
+\RequirePackage{xstring}
 
 \newif\ifprintanswers
 \printanswersfalse
@@ -3681,16 +3690,28 @@
   \begingroup
     \let\half=\relax
     \edef\pt@string{\@points}%
-    \ifthenelse{\equal{\pt@string}{1} \or \equal{\pt@string}{\half}}
-          {\point@sing}{\point@plur}%
+    \StrSubstitute{\pt@string}{\half}{.5}[\pt@stringdim]%
+    \newdimen \pt@dim%
+    \pt@dim = \pt@stringdim pt %
+    \ifdim \pt@dim < 2pt%
+        \point@sing
+    \else%
+        \point@plur
+    \fi%
   \endgroup
 }% \points
 \newcommand\bonuspoints{%
   \begingroup
     \let\half=\relax
     \edef\pt@string{\@points}%
-    \ifthenelse{\equal{\pt@string}{1} \or \equal{\pt@string}{\half}}
-          {\bonuspoint@sing}{\bonuspoint@plur}%
+    \StrSubstitute{\pt@string}{\half}{.5}[\pt@stringdim]%
+    \newdimen \pt@dim%
+    \pt@dim = \pt@stringdim pt %
+    \ifdim \pt@dim < 2pt%
+        \bonuspoint@sing
+    \else%
+        \bonuspoint@plur
+    \fi%
   \endgroup
 }% \bonuspoints
 %\newcommand\points{%
