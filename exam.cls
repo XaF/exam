@@ -4,7 +4,7 @@
 
 %% exam.cls
 %% Copyright (c) 1994, 1997, 2000, 2004, 2008 Philip S. Hirschhorn
-%% Copyright (c) 2013 Raphaël Beamonte <raphael.beamonte@gmail.com>
+%% Copyright (c) 2013, 2015 Raphaël Beamonte <raphael.beamonte@gmail.com>
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -32,8 +32,8 @@
 % from my web page: http://www-math.mit.edu/~psh/
 
 
-\def\fileversion{2.401}
-\def\filedate{2013/11/27}
+\def\fileversion{2.402}
+\def\filedate{2015/02/10}
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
 % 
@@ -85,6 +85,34 @@
 %--------------------------------------------------------------------
 %                    Changelog since version 2.3:
 
+%--------------------------------------------------------------------
+% Version 2.402, 2015/02/10:
+%
+% Add the new \quarter and \threequarter commands to add .25 and .75
+% notation for questions and show 1/4 and 3/4 fractions in the
+% document
+%
+% New commands:
+%  - \usedecimalquarter
+%    \usedecimalhalf
+%    \usedecimalthreequarter
+%            To use decimal values (.25, .5 and .75) instead of
+%            fractions in the document.
+%  - \useslantedquarter
+%    \useslantedthreequarter
+%            Same use as \useslantedhalf but for \quarter and
+%            \threequarter
+%  - \usehorizontalquarter
+%    \usehorizontalthreequarter
+%            Same use as \usehorizontalhalf but for \quarter and
+%            \threequarter
+%  - \usehorizontalfrac
+%    \useslantedfrac
+%    \usedecimalfrac
+%            To set the use of horizontal, slanted or decimal for
+%            all of \quarter, \half and \threequarter at the same
+%            time.
+%
 %--------------------------------------------------------------------
 % Version 2.401, 2013/11/27:
 %
@@ -2198,6 +2226,8 @@
 % To create a hlfcntr:
 \newcommand*\new@hlfcntr[1]{%
   \newcounter{#1}%
+  \expandafter\newif\csname if#1@threequarter\endcsname
+  \expandafter\newif\csname if#1@quarter\endcsname
   \expandafter\newif\csname if#1@half\endcsname
 }% new@hlfcntr
 
@@ -2205,22 +2235,55 @@
 % A scratch hlfcntr:
 \new@hlfcntr{tmp@hlfcntr}
 
+\newcommand*\decim@threequarter{.75}
+\newcommand*\decim@quarter{.25}
+\newcommand*\decim@half{.5}
+\newcommand*\horiz@threequarter{$\frac{3}{4}$}
+\newcommand*\horiz@quarter{$\frac{1}{4}$}
 \newcommand*\horiz@half{$\frac{1}{2}$}
+\newcommand*\slanted@threequarter{%
+  $\raise0.6ex\hbox{$\scriptstyle 3$}\kern -.2em/\kern -.2em
+     \raise-0.5ex\hbox{$\scriptstyle 4$}$%
+}% slanted@threequarter
+\newcommand*\slanted@quarter{%
+  $\raise0.6ex\hbox{$\scriptstyle 1$}\kern -.2em/\kern -.2em
+     \raise-0.5ex\hbox{$\scriptstyle 4$}$%
+}% slanted@quarter
 \newcommand*\slanted@half{%
   $\raise0.6ex\hbox{$\scriptstyle 1$}\kern -.2em/\kern -.2em
      \raise-0.5ex\hbox{$\scriptstyle 2$}$%
 }% slanted@half
+\newcommand*\useslantedthreequarter{\global\let\threequarter\slanted@threequarter}
+\newcommand*\usehorizontalthreequarter{\global\let\threequarter\horiz@threequarter}
+\newcommand*\usedecimalthreequarter{\global\let\threequarter\decim@threequarter}
+\newcommand*\threequarter{\slanted@threequarter}
+\newcommand*\useslantedquarter{\global\let\quarter\slanted@quarter}
+\newcommand*\usehorizontalquarter{\global\let\quarter\horiz@quarter}
+\newcommand*\usedecimalquarter{\global\let\quarter\decim@quarter}
+\newcommand*\quarter{\slanted@quarter}
 \newcommand*\useslantedhalf{\global\let\half\slanted@half}
 \newcommand*\usehorizontalhalf{\global\let\half\horiz@half}
+\newcommand*\usedecimalhalf{\global\let\half\decim@half}
 \newcommand*\half{\slanted@half}
+\newcommand*\usehorizontalfrac{\usehorizontalthreequarter \usehorizontalhalf \usehorizontalquarter}
+\newcommand*\usedecimalfrac{\usedecimalthreequarter \usedecimalhalf \usedecimalquarter}
+\newcommand*\useslantedfrac{\useslantedthreequarter \useslantedhalf \useslantedquarter}
 
 
 \newcommand*\set@hlfcntr[2]{%
   \begingroup
+    \global\csname #1@threequarterfalse\endcsname
+    \global\csname #1@quarterfalse\endcsname
     \global\csname #1@halffalse\endcsname
     % If there as a `\half' present, it will be executed
     % right after the assignment of the digit part of #2
     % to the counter #1.
+    \def\threequarter{%
+      \global\csname #1@threequartertrue\endcsname
+    }%
+    \def\quarter{%
+      \global\csname #1@quartertrue\endcsname
+    }%
     \def\half{%
       \global\csname #1@halftrue\endcsname
     }%
@@ -2236,6 +2299,16 @@
 \newcommand*\copy@hlfcntr[2]{%
   % We set #1 to the value of #2
   \setcounter{#1}{\value{#2}}%
+  \csname if#2@threequarter\endcsname
+    \global\csname #1@threequartertrue\endcsname
+  \else
+    \global\csname #1@threequarterfalse\endcsname
+  \fi
+  \csname if#2@quarter\endcsname
+    \global\csname #1@quartertrue\endcsname
+  \else
+    \global\csname #1@quarterfalse\endcsname
+  \fi
   \csname if#2@half\endcsname
     \global\csname #1@halftrue\endcsname
   \else
@@ -2246,6 +2319,8 @@
 \newcommand*\addto@hlfcntr[2]{%
   % We add the valueandhalf #2 to hlfcntr #1
   \begingroup
+    \def\threequarter{\add@threequarter{#1}}%
+    \def\quarter{\add@quarter{#1}}%
     \def\half{\add@half{#1}}%
     % We insert a `0' in case there are no digits present:
     % We avoid using \addtocounter, because calc.sty redefines
@@ -2259,10 +2334,36 @@
 \newcommand*\add@hlfcntrtohlfcntr[2]{%
   % We add the hlfcntr #2 to the hlfcntr #1
   \addtocounter{#1}{\value{#2}}%
+  \csname if#2@threequarter\endcsname
+    \add@threequarter{#1}%
+  \fi
+  \csname if#2@quarter\endcsname
+    \add@quarter{#1}%
+  \fi
   \csname if#2@half\endcsname
     \add@half{#1}%
   \fi
 }% add@hlfcntrtohlfcntr
+
+\newcommand*\add@threequarter[1]{%
+  % We add three quarter to hlfcntr #1:
+  \csname if#1@threequarter\endcsname
+    \addtocounter{#1}{1}%
+    \global\csname #1@threequarterfalse\endcsname
+  \else
+    \global\csname #1@threequartertrue\endcsname
+  \fi
+}% add@threequarter
+
+\newcommand*\add@quarter[1]{%
+  % We add one quarter to hlfcntr #1:
+  \csname if#1@quarter\endcsname
+    \addtocounter{#1}{1}%
+    \global\csname #1@quarterfalse\endcsname
+  \else
+    \global\csname #1@quartertrue\endcsname
+  \fi
+}% add@quarter
 
 \newcommand*\add@half[1]{%
   % We add one half to hlfcntr #1:
@@ -2280,6 +2381,12 @@
   % can never be negative); we'll be true if and only if
   % that halfcntr is positive:
   \setcounter{ifpos@cntr}{\value{#1}}%
+  \csname if#1@threequarter\endcsname
+    \addtocounter{ifpos@cntr}{1}%
+  \fi
+  \csname if#1@quarter\endcsname
+    \addtocounter{ifpos@cntr}{1}%
+  \fi
   \csname if#1@half\endcsname
     \addtocounter{ifpos@cntr}{1}%
   \fi
@@ -2295,15 +2402,36 @@
     % We have to make the following a macro, because if we
     % don't do this part, the \fi will cause confusion, since
     % there's no \if visible until the \csname is expanded:
-    \prtaux@halforzero{#1}%
+    \prtaux@quartersorzero{#1}%
   \else
     \arabic{#1}%
     % We have to make the following a macro, because if we
     % don't do this part, the \fi will cause confusion, since
     % there's no \if visible until the \csname is expanded:
-    \prtaux@halforblank{#1}%
+    \prtaux@quartersorblank{#1}%
   \fi
 }% prtaux@hlfcntr
+\newcommand*\prtaux@quartersorzero[1]{%
+  \csname if#1@threequarter\endcsname
+    \string\threequarter
+  \else
+    \prtaux@quartersorzerobis{#1}
+  \fi
+}% prtaux@quartersorzero
+\newcommand*\prtaux@quartersorzerobis[1]{%
+  \csname if#1@half\endcsname
+    \string\half
+  \else
+    \prtaux@quartersorzeroter{#1}
+  \fi
+}% prtaux@quartersorzerobis
+\newcommand*\prtaux@quartersorzeroter[1]{%
+  \csname if#1@quarter\endcsname
+    \string\quarter
+  \else
+    0%
+  \fi
+}% prtaux@quartersorzeroter
 \newcommand*\prtaux@halforzero[1]{%
   \csname if#1@half\endcsname
     \string\half
@@ -2311,6 +2439,25 @@
     0%
   \fi
 }% prtaux@hlforzero
+\newcommand*\prtaux@quartersorblank[1]{%
+  \csname if#1@threequarter\endcsname
+    \string\threequarter
+  \else
+    \prtaux@quartersorblankbis{#1}
+  \fi
+}% prtaux@quartersorblank
+\newcommand*\prtaux@quartersorblankbis[1]{%
+  \csname if#1@half\endcsname
+    \string\half
+  \else
+    \prtaux@quartersorblankter{#1}
+  \fi
+}% prtaux@quartersorblankbis
+\newcommand*\prtaux@quartersorblankter[1]{%
+  \csname if#1@quarter\endcsname
+    \string\quarter
+  \fi
+}% prtaux@quartersorblankter
 \newcommand*\prtaux@halforblank[1]{%
   \csname if#1@half\endcsname
     \string\half
@@ -2324,15 +2471,36 @@
     % We have to make the following a macro, because if we
     % don't do this part, the \fi will cause confusion, since
     % there's no \if visible until the \csname is expanded:
-    \prt@halforzero{#1}%
+    \prt@quartersorzero{#1}%
   \else
     \arabic{#1}%
     % We have to make the following a macro, because if we
     % don't do this part, the \fi will cause confusion, since
     % there's no \if visible until the \csname is expanded:
-    \prt@halforblank{#1}%
+    \prt@quartersorblank{#1}%
   \fi
 }% prt@hlfcntr
+\newcommand*\prt@quartersorzero[1]{%
+  \csname if#1@threequarter\endcsname
+    \threequarter
+  \else
+    \prt@quartersorzerobis{#1}
+  \fi
+}% prt@quartersorzero
+\newcommand*\prt@quartersorzerobis[1]{%
+  \csname if#1@half\endcsname
+    \half
+  \else
+    \prt@quartersorzeroter{#1}
+  \fi
+}% prt@quartersorzerobis
+\newcommand*\prt@quartersorzeroter[1]{%
+  \csname if#1@quarter\endcsname
+    \quarter
+  \else
+    0%
+  \fi
+}% prt@quartersorzeroter
 \newcommand*\prt@halforzero[1]{%
   \csname if#1@half\endcsname
     \half
@@ -2340,6 +2508,25 @@
     0%
   \fi
 }% prt@hlforzero
+\newcommand*\prt@quartersorblank[1]{%
+  \csname if#1@threequarter\endcsname
+    \threequarter
+  \else
+    \prt@quartersorblankbis{#1}
+  \fi
+}% prt@quartersorblank
+\newcommand*\prt@quartersorblankbis[1]{%
+  \csname if#1@half\endcsname
+    \half
+  \else
+    \prt@quartersorblankter{#1}
+  \fi
+}% prt@quartersorblankbis
+\newcommand*\prt@quartersorblankter[1]{%
+  \csname if#1@quarter\endcsname
+    \quarter
+  \fi
+}% prt@quartersorblankter
 \newcommand*\prt@halforblank[1]{%
   \csname if#1@half\endcsname
     \half
@@ -3688,9 +3875,13 @@
 % 0 points, one half point, 1 point, 1 and a half points, etc.:
 \newcommand\points{%
   \begingroup
+    \let\threequarter=\relax
+    \let\quarter=\relax
     \let\half=\relax
     \edef\pt@string{\@points}%
-    \StrSubstitute{\pt@string}{\half}{.5}[\pt@stringdim]%
+    \StrSubstitute{\pt@string}{\threequarter}{.75}[\pt@stringdim]%
+    \StrSubstitute{\pt@stringdim}{\quarter}{.25}[\pt@stringdim]%
+    \StrSubstitute{\pt@stringdim}{\half}{.5}[\pt@stringdim]%
     \newdimen \pt@dim%
     \pt@dim = \pt@stringdim pt %
     \ifdim \pt@dim < 2pt%
@@ -3702,8 +3893,12 @@
 }% \points
 \newcommand\bonuspoints{%
   \begingroup
+    \let\threequarter=\relax
+    \let\quarter=\relax
     \let\half=\relax
     \edef\pt@string{\@points}%
+    \StrSubstitute{\pt@string}{\threequarter}{.75}[\pt@stringdim]%
+    \StrSubstitute{\pt@string}{\quarter}{.25}[\pt@stringdim]%
     \StrSubstitute{\pt@string}{\half}{.5}[\pt@stringdim]%
     \newdimen \pt@dim%
     \pt@dim = \pt@stringdim pt %
