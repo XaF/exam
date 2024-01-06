@@ -4,7 +4,7 @@
 
 %% exam.cls
 %% Copyright (c) 1994, 1997, 2000, 2004, 2008 Philip S. Hirschhorn
-%% Copyright (c) 2013, 2015 Raphaël Beamonte <raphael.beamonte@gmail.com>
+%% Copyright (c) 2013, 2015, 2024 Raphaël Beamonte <raphael.beamonte@gmail.com>
 %
 % This work may be distributed and/or modified under the
 % conditions of the LaTeX Project Public License, either version 1.3
@@ -15,7 +15,7 @@
 % version 2003/12/01 or later.
 %
 % This work has the LPPL maintenance status "author-maintained".
-% 
+%
 % This work consists of the files exam.cls and examdoc.tex.
 
 
@@ -32,14 +32,14 @@
 % from my web page: http://www-math.mit.edu/~psh/
 
 
-\def\fileversion{2.402}
-\def\filedate{2015/02/10}
+\def\fileversion{2.403}
+\def\filedate{2024/01/06}
 %---------------------------------------------------------------------
 %---------------------------------------------------------------------
-% 
+%
 % If there's some feature that you'd like that this file doesn't
 % provide, tell me about it.
-% 
+%
 %
 %
 %
@@ -56,7 +56,7 @@
 %
 % Tom Brikowski <brikowi@utdallas.edu>, who contributed the code for
 % making the number of points and number of questions available as
-% macros (as well as the idea of putting the number of points in a 
+% macros (as well as the idea of putting the number of points in a
 % box, instead of in parentheses).  (I changed his code to make this
 % all optional, so if there are errors there, it's my fault and not
 % his.)
@@ -70,7 +70,7 @@
 %
 % Justus Piater <Justus.Piater@ULg.ac.be>, who contributed the code for
 % the solution environment.  (I changed his code to allow page breaks
-% inside solutions so, once again, if it's buggy, it's my fault.) 
+% inside solutions so, once again, if it's buggy, it's my fault.)
 %
 % Donald Arseneau <asnd@triumf.ca>, who created the excellent
 % ``framed.sty'' and generously allowed me to include basically the
@@ -86,6 +86,12 @@
 %                    Changelog since version 2.3:
 
 %--------------------------------------------------------------------
+% Version 2.403, 2024/01/06:
+%
+% Fix a bug in the counting of the quarter, half and threequarter
+% points, which did not account for potential total points being
+% fractional.
+%
 % Version 2.402, 2015/02/10:
 %
 % Add the new \quarter and \threequarter commands to add .25 and .75
@@ -301,7 +307,7 @@
 % Version 2.312$\beta$, 2010/01/17:
 %
 % New commands:
-% 
+%
 %   \combinedgradetable
 %   \combinedpointtable
 %   \partialcombinedgradetable
@@ -408,9 +414,9 @@
 %
 % Note added 2011/04/05:: The above is changed in version 2.318$\beta$.
 % \qformat and \bonusqformat are now completely independent.
-% \noqformat cancels only \qformat, and the new command 
+% \noqformat cancels only \qformat, and the new command
 % \nobonusqformat cancels \bonusqformat.
-% 
+%
 %--------------------------------------------------------------------
 % Version 2.309$\beta$, 2009/11/30:
 %
@@ -680,7 +686,7 @@
   \divide\@extrawidth by 2
   \advance\oddsidemargin by -\@extrawidth
   \advance\evensidemargin by -\@extrawidth
-  % Bug fix, 13 April 2004: 
+  % Bug fix, 13 April 2004:
   %\advance\@rightmargin by \@extrawidth
   \advance\@rightmargin by -\@extrawidth
 }
@@ -689,7 +695,7 @@
 %--------------------------------------------------------------------
 %             Making room for large headers and footers
 
-% The following are used to save the effect of any changes to 
+% The following are used to save the effect of any changes to
 % \topmargin and \textheight caused by \extraheadheight or
 % \extrafootheight commands.  They hold the values currently in effect.
 % We put them into lengths so that it will work correctly even if the
@@ -881,7 +887,7 @@
     % executed only in the preamble or as we return from the output
     % routine, but we're leaving it in so that this will still work if
     % we use this at some random point in the middle of composing a
-    % page). 
+    % page).
     % Bugfix, Version 2.306beta, 2009/03/28:
     % We don't do this!!
     % If the user had a figure environment that floated to the
@@ -908,13 +914,13 @@
 %                      *************************
 %                      ** HEADERS AND FOOTERS **
 %                      *************************
-% 
+%
 % The pagestyles available are head, foot, headandfoot, and empty.
 % \pagestyle{head} prints the head, and gives an empty foot.
 % \pagestyle{foot} prints the foot, and gives an empty head.
 % \pagestyle{headandfoot} prints both the head and the foot.
 % \pagestyle{empty} gives an empty head and an empty foot.
-% 
+%
 
 %                            Pagestyles:
 
@@ -968,7 +974,7 @@
     % Bugfix, Version 2.307\beta, 2009/06/11:
     % We have to say \@coverpagesfalse before \adj@hdht@ftht
     % because we're still inside the group created by the
-    % coverpages environment and we want to set the 
+    % coverpages environment and we want to set the
     % extraheadheight and extrafootheight to the values correct
     % for the first non-cover page:
     \@coverpagesfalse
@@ -1112,7 +1118,7 @@
 
 %--------------------------------------------------------------------
 %       \cov@fullhead, \covrun@fullhead, \cov@fullfoot, and
-%       \covrun@fullfoot: 
+%       \covrun@fullfoot:
 
 \newcommand*\cov@fullhead{%
   \vbox to \headheight{%
@@ -1197,23 +1203,23 @@
 %
 % \lhead[#1]{#2} sets the first page left head to #1, and the
 %   running left head to #2
-% 
+%
 % \lhead{#1} sets both the first page left head and the running
 %   left head to #1
-% 
+%
 % \chead, \rhead, \lfoot, \cfoot, and \rfoot work similarly.
-% 
-% 
+%
+%
 % \@lhead is the left head for Page 1
 % \run@lhead is the running left head
 % (i.e., for all pages other than the first)
-% 
+%
 % \@chead is the center head for Page 1
 % \run@chead is the running center head
 % (i.e., for all pages other than the first)
-% 
+%
 % etc.
-% 
+%
 % Alternative commands are:
 % \firstpageheader{LEFT}{CENTER}{RIGHT}
 % \runningheader{LEFT}{CENTER}{RIGHT}
@@ -1222,7 +1228,7 @@
 % which is equivalent to the two commands
 %          \firstpageheader{LEFT}{CENTER}{RIGHT}
 %          \runningheader{LEFT}{CENTER}{RIGHT}
-% 
+%
 % Alternative commands are:
 % \firstpagefooter{LEFT}{CENTER}{RIGHT}
 % \runningfoother{LEFT}{CENTER}{RIGHT}
@@ -1307,24 +1313,24 @@
 %
 % \coverlhead[#1]{#2} sets the first cover page left head to #1, and the
 %   running cover left head to #2
-% 
+%
 % \coverlhead{#1} sets both the first cover page left head and the running
 %   cover left head to #1
-% 
+%
 % \coverchead, \coverrhead, \coverlfoot, \covercfoot, and \coverrfoot
 % work similarly.
-% 
-% 
+%
+%
 % \cov@lhead is the left head for Page 1
 % \covrun@lhead is the running left head
 % (i.e., for all pages other than the first)
-% 
+%
 % \cov@chead is the center head for Page 1
 % \covrun@chead is the running center head
 % (i.e., for all pages other than the first)
-% 
+%
 % etc.
-% 
+%
 % Alternative commands are:
 % \coverfirstpageheader{LEFT}{CENTER}{RIGHT}
 % \coverrunningheader{LEFT}{CENTER}{RIGHT}
@@ -1333,7 +1339,7 @@
 % which is equivalent to the two commands
 %          \coverfirstpageheader{LEFT}{CENTER}{RIGHT}
 %          \coverrunningheader{LEFT}{CENTER}{RIGHT}
-% 
+%
 % Alternative commands are:
 % \coverfirstpagefooter{LEFT}{CENTER}{RIGHT}
 % \coverrunningfoother{LEFT}{CENTER}{RIGHT}
@@ -1625,7 +1631,7 @@
 
 %%%\let\@realenddocument=\enddocument
 %%%\def\enddocument{\clearpage
-%%%   \if@filesw 
+%%%   \if@filesw
 %%%     {\advance\c@page-1 \immediate\write\@mainaux
 %%%       {\string\newlabel{@lastpage}{{}{\arabic{page}}}}%
 %%%     }
@@ -1816,8 +1822,8 @@
 
 % The \PgInfo command defines a control sequence of the form `Pg@label'
 % that expands to the page number for the corresponding question.  For
-% example, \PgInfo{subsubpart@2@1@3@4}{7} defines 
-%   \csname Pg@subsubpart@2@1@3@4\endcsname 
+% example, \PgInfo{subsubpart@2@1@3@4}{7} defines
+%   \csname Pg@subsubpart@2@1@3@4\endcsname
 % to expand to 7.
 
 % The \PgInfo@get{label} command returns the value of the macro Pg@label,
@@ -1921,7 +1927,7 @@
          \fi
         }%
       \fi
-    \fi 
+    \fi
   \fi
 }
 
@@ -1975,7 +1981,7 @@
     % We get here if there's no question, part, subpart,
     % subsubpart, or choice on this page, and so Contin@\thepage has
     % never been defined at all.  In that case, this page
-    % continues whichever question was last begun on or 
+    % continues whichever question was last begun on or
     % before this page.
     \find@latestques
     \thelatest@ques
@@ -2033,7 +2039,7 @@
     % If question latest@ques actually begins on this page (rather
     % than on the next page, but early enough on the next page
     % that the counter was advanced before we ran off into the
-    % output routine to output the page and set the header and 
+    % output routine to output the page and set the header and
     % footer), then that's the correct question number.
     \expandafter\ifx\csname Pg@question@\arabic{question}\endcsname\relax
       % We don't know what page that question is on;
@@ -2347,33 +2353,127 @@
 
 \newcommand*\add@threequarter[1]{%
   % We add three quarter to hlfcntr #1:
-  \csname if#1@threequarter\endcsname
-    \addtocounter{#1}{1}%
-    \global\csname #1@threequarterfalse\endcsname
-  \else
-    \global\csname #1@threequartertrue\endcsname
-  \fi
-}% add@threequarter
-
-\newcommand*\add@quarter[1]{%
-  % We add one quarter to hlfcntr #1:
   \csname if#1@quarter\endcsname
     \addtocounter{#1}{1}%
     \global\csname #1@quarterfalse\endcsname
   \else
-    \global\csname #1@quartertrue\endcsname
+    % We have to make the following a macro, because if we
+    % don't do this part, the \fi will cause confusion, since
+    % there's no \if visible until the \csname is expanded:
+    \addbis@half{#1}
+      \csname if#1@half\endcsname
+        \addtocounter{#1}{1}%
+        \global\csname #1@halffalse\endcsname
+        \global\csname #1@quartertrue\endcsname
+      \else
+          \csname if#1@threequarter\endcsname
+            \addtocounter{#1}{1}%
+            \global\csname #1@threequarterfalse\endcsname
+            \global\csname #1@halftrue\endcsname
+          \else
+            \global\csname #1@threequartertrue\endcsname
+          \fi
+      \fi
   \fi
-}% add@quarter
+}% add@threequarter
+
+\newcommand*\addbis@threequarter[1]{%
+  % We add three quarter to hlfcntr #1:
+  \csname if#1@half\endcsname
+    \addtocounter{#1}{1}%
+    \global\csname #1@halffalse\endcsname
+    \global\csname #1@quartertrue\endcsname
+  \else
+    % We have to make the following a macro, because if we
+    % don't do this part, the \fi will cause confusion, since
+    % there's no \if visible until the \csname is expanded:
+    \addter@half{#1}
+  \fi
+}% addbis@threequarter
+
+\newcommand*\addter@threequarter[1]{%
+  % We add three quarter to hlfcntr #1:
+  \csname if#1@threequarter\endcsname
+    \addtocounter{#1}{1}%
+    \global\csname #1@threequarterfalse\endcsname
+    \global\csname #1@halftrue\endcsname
+  \else
+    \global\csname #1@threequartertrue\endcsname
+  \fi
+}% addter@threequarter
 
 \newcommand*\add@half[1]{%
+  % We add one half to hlfcntr #1:
+  \csname if#1@quarter\endcsname
+    \global\csname #1@quarterfalse\endcsname
+    \global\csname #1@threequartertrue\endcsname
+  \else
+    % We have to make the following a macro, because if we
+    % don't do this part, the \fi will cause confusion, since
+    % there's no \if visible until the \csname is expanded:
+    \addbis@half{#1}
+  \fi
+}% add@half
+
+\newcommand*\addbis@half[1]{%
   % We add one half to hlfcntr #1:
   \csname if#1@half\endcsname
     \addtocounter{#1}{1}%
     \global\csname #1@halffalse\endcsname
   \else
+    % We have to make the following a macro, because if we
+    % don't do this part, the \fi will cause confusion, since
+    % there's no \if visible until the \csname is expanded:
+    \addter@half{#1}
+  \fi
+}% addbis@half
+
+\newcommand*\addter@half[1]{%
+  % We add one half to hlfcntr #1:
+  \csname if#1@threequarter\endcsname
+    \addtocounter{#1}{1}%
+    \global\csname #1@threequarterfalse\endcsname
+    \global\csname #1@quartertrue\endcsname
+  \else
     \global\csname #1@halftrue\endcsname
   \fi
-}% add@half
+}% addter@half
+
+\newcommand*\add@quarter[1]{%
+  % We add one quarter to hlfcntr #1:
+  \csname if#1@quarter\endcsname
+    \global\csname #1@quarterfalse\endcsname
+    \global\csname #1@halftrue\endcsname
+  \else
+    % We have to make the following a macro, because if we
+    % don't do this part, the \fi will cause confusion, since
+    % there's no \if visible until the \csname is expanded:
+    \addbis@quarter{#1}
+  \fi
+}% add@quarter
+
+\newcommand*\addbis@quarter[1]{%
+  % We add one quarter to hlfcntr #1:
+  \csname if#1@half\endcsname
+    \global\csname #1@halffalse\endcsname
+    \global\csname #1@threequartertrue\endcsname
+  \else
+    % We have to make the following a macro, because if we
+    % don't do this part, the \fi will cause confusion, since
+    % there's no \if visible until the \csname is expanded:
+    \addter@quarter{#1}
+  \fi
+}% addbis@quarter
+
+\newcommand*\addter@quarter[1]{%
+  % We add one quarter to hlfcntr #1:
+  \csname if#1@threequarter\endcsname
+    \addtocounter{#1}{1}%
+    \global\csname #1@threequarterfalse\endcsname
+  \else
+    \global\csname #1@quartertrue\endcsname
+  \fi
+}% addter@quarter
 
 \newcounter{ifpos@cntr}
 \def\ifhlfcntr@pos#1{%
@@ -2398,7 +2498,7 @@
 \newcommand*\prtaux@hlfcntr[1]{%
   % We don't want a \relax after the 0 in the following
   % line, because it would sometimes appear in the aux file:
-  \ifnum \value{#1} = 0 
+  \ifnum \value{#1} = 0
     % We have to make the following a macro, because if we
     % don't do this part, the \fi will cause confusion, since
     % there's no \if visible until the \csname is expanded:
@@ -2467,7 +2567,7 @@
 \newcommand*\prt@hlfcntr[1]{%
   % We don't want a \relax after the 0 in the following
   % line, because it would sometimes appear in the aux file:
-  \ifnum \value{#1} = 0 
+  \ifnum \value{#1} = 0
     % We have to make the following a macro, because if we
     % don't do this part, the \fi will cause confusion, since
     % there's no \if visible until the \csname is expanded:
@@ -2801,12 +2901,12 @@
 
 \newenvironment{questions}{%
   % \@queslevel is used for two purposes:
-  % (1) We check that every \question, \part, \subpart, and 
+  % (1) We check that every \question, \part, \subpart, and
   % \subsubpart command appears inside the appropriate environment,
   % and generate an error if one appears in the wrong place.
   % (2) If a \qformat is being used and if \@queslevel tells us
   % that we're currently processing a question, then we set
-  % \global \point@toks={} to avoid setting the points for a 
+  % \global \point@toks={} to avoid setting the points for a
   % question other than via the qformat command.
   \def\@queslevel{question}%
   \def\titledquestion##1{%
@@ -2871,7 +2971,7 @@
     % but that allowed for an error if the user specified points for a
     % question but had a \qformat that didn't mention \thepoints.)  We
     % also set @placepoints to be false when entering a parts
-    % environment. 
+    % environment.
     \global \@placepointsfalse
     % point@toks will normally be empty at this point, but it might be
     % nonempty if there were points somewhere in the previous question
@@ -2883,7 +2983,7 @@
     % Important: Don't leave any blank lines inside of
     % \pageinfo@commands!!  This token list will be dumped into
     % horizontal mode by \everypar, and so any blank lines will
-    % cause paragraph breaks. 
+    % cause paragraph breaks.
     \pageinfo@commands={%
       \edef\@queslabel{question@\arabic{question}}%
       \PgInfo@write{\@queslabel}%
@@ -2892,13 +2992,13 @@
       % command.  We do this in order to make the question numbers in
       % the grade tables into \ref's, so that if the user says
       % \usepackage{hyperref}, those question numbers will be clickable.
-      % 
+      %
       % A further purpose of these labels (which we actually do for all
       % questions, parts, subparts, and subsubparts) is that if a
       % question (or part, etc.) is, e.g., moved from one page to
       % another, LaTeX will notice this and warn the user that LaTeX
       % must be run one more time to be sure everything is correct.
-      % 
+      %
       % We need to do this even though we've already included code to
       % check when point totals change because questions (and parts,
       % etc.) know what page they're on from reading the info written to
@@ -2955,7 +3055,7 @@
     % Important: Don't leave any blank lines inside of
     % \pageinfo@commands!!  This token list will be dumped into
     % horizontal mode by \everypar, and so any blank lines will
-    % cause paragraph breaks. 
+    % cause paragraph breaks.
     \temp@toks={%
       \edef\@subpartlabel{subpart@\arabic{question}%
         @\arabic{partno}@\arabic{subpart}}%
@@ -2965,13 +3065,13 @@
       % command.  We do this in order to make the question numbers in
       % the grade tables into \ref's, so that if the user says
       % \usepackage{hyperref}, those question numbers will be clickable.
-      % 
+      %
       % A further purpose of these labels (which we actually do for all
       % questions, parts, subparts, and subsubparts) is that if a
       % question (or part, etc.) is, e.g., moved from one page to
       % another, LaTeX will notice this and warn the user that LaTeX
       % must be run one more time to be sure everything is correct.
-      % 
+      %
       % We need to do this even though we've already included code to
       % check when point totals change because questions (and parts,
       % etc.) know what page they're on from reading the info written to
@@ -3017,7 +3117,7 @@
     % Important: Don't leave any blank lines inside of
     % \pageinfo@commands!!  This token list will be dumped into
     % horizontal mode by \everypar, and so any blank lines will
-    % cause paragraph breaks. 
+    % cause paragraph breaks.
     \temp@toks={%
       \edef\@subsubpartlabel{subsubpart@\arabic{question}%
         @\arabic{partno}@\arabic{subpart}@\arabic{subsubpart}}%
@@ -3027,13 +3127,13 @@
       % command.  We do this in order to make the question numbers in
       % the grade tables into \ref's, so that if the user says
       % \usepackage{hyperref}, those question numbers will be clickable.
-      % 
+      %
       % A further purpose of these labels (which we actually do for all
       % questions, parts, subparts, and subsubparts) is that if a
       % question (or part, etc.) is, e.g., moved from one page to
       % another, LaTeX will notice this and warn the user that LaTeX
       % must be run one more time to be sure everything is correct.
-      % 
+      %
       % We need to do this even though we've already included code to
       % check when point totals change because questions (and parts,
       % etc.) know what page they're on from reading the info written to
@@ -3100,7 +3200,7 @@
       \fi
     \fi
   }% End of the second argument of \newenvironment{questions}
-  
+
 % \question@number is used as the label in the question list (instead
 % of \questionlabel) so that if the user uses a \qformat command,
 % we'll use the \@questionformat specified by the \qformat command:
@@ -3121,7 +3221,7 @@
   \fi
 }
 \newcommand\questionlabel{\thequestion.}
-     
+
 % We want the \part command to be defined *only* inside of a parts
 % environment, so that the user can use the standard sectioning \part
 % command inside of a questions environment (as long as it's outside of
@@ -3184,7 +3284,7 @@
     % Important: Don't leave any blank lines inside of
     % \pageinfo@commands!!  This token list will be dumped into
     % horizontal mode by \everypar, and so any blank lines will
-    % cause paragraph breaks. 
+    % cause paragraph breaks.
     \temp@toks={%
       \edef\@partlabel{part@\arabic{question}@\arabic{partno}}%
       \PgInfo@write{\@partlabel}%
@@ -3193,13 +3293,13 @@
       % command.  We do this in order to make the question numbers in
       % the grade tables into \ref's, so that if the user says
       % \usepackage{hyperref}, those question numbers will be clickable.
-      % 
+      %
       % A further purpose of these labels (which we actually do for all
       % questions, parts, subparts, and subsubparts) is that if a
       % question (or part, etc.) is, e.g., moved from one page to
       % another, LaTeX will notice this and warn the user that LaTeX
       % must be run one more time to be sure everything is correct.
-      % 
+      %
       % We need to do this even though we've already included code to
       % check when point totals change because questions (and parts,
       % etc.) know what page they're on from reading the info written to
@@ -3278,7 +3378,7 @@
 \pagepoint@commands={%
   \ifhlfcntr@pos{latest@points}%
     % We're putting a question (or part, etc.)
-    % with points onto this page: 
+    % with points onto this page:
     \ifnum \theCurr@Page > \thepageof@pagepoints\relax
       % These points go on a later page than
       % the points currently counted in @pagepoints:
@@ -3310,7 +3410,7 @@
   \fi
   \ifhlfcntr@pos{latest@bonuspoints}%
     % We're putting a question (or part, etc.)
-    % with bonus points onto this page: 
+    % with bonus points onto this page:
     \ifnum \theCurr@Page > \thepageof@pagebonuspoints\relax
       % These bonus points go on a later page than
       % the points currently counted in @pagebonuspoints:
@@ -3355,7 +3455,7 @@
       {%
       % OK; it's defined.  See if it's changed:
       \begingroup
-        \set@hlfcntr{tmp@hlfcntr}{\csname pointsonpage@\romannumeral 
+        \set@hlfcntr{tmp@hlfcntr}{\csname pointsonpage@\romannumeral
                   \csname c@pageof@pagepoints\endcsname\endcsname}%
         \edef\othpt@check{\prtaux@hlfcntr{tmp@hlfcntr}}%
         \def\pt@check{0}%
@@ -3391,7 +3491,7 @@
       {%
       % OK; it's defined.  See if it's changed:
       \begingroup
-        \set@hlfcntr{tmp@hlfcntr}{\csname bonuspointsonpage@\romannumeral 
+        \set@hlfcntr{tmp@hlfcntr}{\csname bonuspointsonpage@\romannumeral
                   \csname c@pageof@pagebonuspoints\endcsname\endcsname}%
         \edef\othpt@check{\prtaux@hlfcntr{tmp@hlfcntr}}%
         \def\pt@check{0}%
@@ -3487,7 +3587,7 @@
 % and so the \if@nobreak inside of \everypar will *not* execute the
 % \everypar={} that we had been counting on to keep the points from
 % being inserted a second time in the second paragraph of a question.
-% Since we've put the command \global \point@toks={} inside of 
+% Since we've put the command \global \point@toks={} inside of
 % \point@toks and the command \pageinfo@commands={} inside of
 % \pageinfo@commands, when the contents of \point@toks and of
 % \pageinfo@commands are executed (when we enter horizontal mode and
@@ -3529,7 +3629,7 @@
     % Note: We first tried using an \edef to expand \point@block right
     % here, while @placepoints is true, but that causes problems if
     % the user puts a \boldmath declaration in the argument of a
-    % \pointformat command.  Apparently, expanding \boldmath (without 
+    % \pointformat command.  Apparently, expanding \boldmath (without
     % executing anything) gives you bunches of undefined control
     % sequence errors.
     \if@bonus
@@ -3549,7 +3649,7 @@
     \fi
     % \setup@point@toks puts commands into \point@toks to place
     % \padded@point@block at the correct spot.  It doesn't append
-    % anything to \everypar (we do that in this macro, below). 
+    % anything to \everypar (we do that in this macro, below).
     %
     % If @qformat is true, and if we're currently doing a question (or
     % if @bonusqformat is true and we're doing a bonusquestion)
@@ -3654,7 +3754,7 @@
 %
   \if@pointsinleftmargin
     \point@toks={%
-          \llap{\padded@point@block 
+          \llap{\padded@point@block
                 \hskip\@totalleftmargin
                 \hskip\marginpointssep
           }%
@@ -3766,7 +3866,7 @@
 \newif\if@pointsdropped
 \newif\if@pointsinleftmargin
 \newif\if@pointsinrightmargin
-\def\pointsinleftmargin{\global\@pointsinleftmargintrue 
+\def\pointsinleftmargin{\global\@pointsinleftmargintrue
                     \global\@pointsinrightmarginfalse
                     \global\@pointsdroppedfalse
                     \gdef\pt@name{\@marginpointname}%
@@ -3836,8 +3936,8 @@
 \def\bonuspointname#1{\gdef\@bonuspointname{#1}}
 % Initialize to leave a space, and then the word `points':
 %%\pointname{ points}
-% The following improvement was contributed by 
-% Mate Wierdl <mw@wierdlmpc.msci.memphis.edu> 
+% The following improvement was contributed by
+% Mate Wierdl <mw@wierdlmpc.msci.memphis.edu>
 % If the number of points is ``1'', then the default value of
 % \pointname will print `` point'' instead of `` points'' (and this
 % version of the command doesn't generate an error message if the
@@ -3979,7 +4079,7 @@
   }%
   % Version 2.217-beta changes:
   % Instead of appending stuff to \everypar, we insert
-  % \the \pageinfo@commands and \the \point@toks 
+  % \the \pageinfo@commands and \the \point@toks
   % into the box \@labels:
   \global\setbox\@labels\hbox{\unhbox\@labels
     \the \choice@toks}%
@@ -4045,7 +4145,7 @@
       \if@correctchoice \endgroup \fi
       \refstepcounter{choice}%
       \ifprintanswers
-        \begingroup \@correctchoicetrue 
+        \begingroup \@correctchoicetrue
         \CorrectChoice@Emphasis
       \fi
       \ifnum\value{choice}>1\relax
@@ -4112,7 +4212,7 @@
     % Although we're not printing numbers for the choices, we use the
     % choice counter to keep track of whether a choice is the first
     % one (in which case we don't leave any additional space) or a
-    % later one (in which case we do leave additional space):    
+    % later one (in which case we do leave additional space):
     \setcounter{choice}{0}%
     \def\choice{%
       \if@correctchoice \endgroup \fi
@@ -4131,7 +4231,7 @@
       \if@correctchoice \endgroup \fi
       \stepcounter{choice}%
       \ifprintanswers
-        \begingroup \@correctchoicetrue 
+        \begingroup \@correctchoicetrue
         \CorrectChoice@Emphasis
       \fi
       \ifnum\value{choice}>1\relax
@@ -4198,7 +4298,7 @@
     \fi
   \fi
   \par \nobreak \vskip \answerskip
-  \hfill 
+  \hfill
   \ifprintanswers
     \ans@l~\hbox to 0pt{\hbox to \answerlinelength{\hrulefill}\hss}%
     \raise \answerclearance\hbox to \answerlinelength{%
@@ -4355,11 +4455,11 @@
 %                      \uplevel and \fullwidth
 %           and the EnvUplevel and EnvFullwidth environments:
 
-% \uplevel is used to print text at the indentation level of the 
+% \uplevel is used to print text at the indentation level of the
 % enclosing environment.  For example, to precede a question with
 % directions about how that question should be answered, you would
 % say \uplevel{Answer this question correctly.}
-% 
+%
 % \fullwidth is similar, but uses the full page of text on the page.
 
 % The EnvUplevel environment is similar to the \uplevel command, but it
@@ -4879,7 +4979,7 @@
       \else
         \ClassError{exam}{%
           The second optional argument to a\MessageBreak
-           \space\space  grade table or point table command\MessageBreak 
+           \space\space  grade table or point table command\MessageBreak
             \space \space must be either `questions' or
             `pages',\MessageBreak
             \space\space not `#2'.\MessageBreak
@@ -5425,7 +5525,7 @@
 %   \set@hlfcntr{tmp@hlfcntr}{\csname pointsonpage@\romannumeral
 %                          \csname c@@iterator\endcsname\endcsname}%
 %   \ifhlfcntr@pos{tmp@hlfcntr}%
-% and if 
+% and if
 %   \csname pointsonpage@\romannumeral
 %             \csname c@@iterator\endcsname\endcsname
 % isn't defined, tmp@hlfcntr gets the value zero (because of the way
@@ -5486,7 +5586,7 @@
     \if@combined
       \ifnum \lastpage@withbonuspoints > \lastpage@withpoints\relax
         \def\tbl@lastp{\lastpage@withbonuspoints}%
-      \fi        
+      \fi
     \fi
     \@tblpages{#1}%
   \fi
@@ -5520,7 +5620,7 @@
 
 \def\@whchtblpgs#1{%
   % At this point, we know the table is indexed by pages.
-  % It can be vertical or horizontal, 
+  % It can be vertical or horizontal,
   % grade or point, and bonus or non-bonus.
   % The argument is either ``v'' or ``h''; test it, and branch:
   \if v#1%
@@ -5531,7 +5631,7 @@
     \else
       \ClassError{exam}{%
         The first optional argument to
-          \protect\gradetable,\MessageBreak 
+          \protect\gradetable,\MessageBreak
           \space\space \protect\bonusgradetable,
             \protect\pointtable, or\MessageBreak
           \space\space
@@ -5961,7 +6061,7 @@
   \begingroup
     \renewcommand\arraystretch{\@gtblstretch}%
     % Set num@cols equal to the number of pages with points (of
-    % correct type): 
+    % correct type):
     \count@pgswpts
     % Suppress ``extra alignment tab'' errors if \thenum@cols = 0:
     \ifnum \thenum@cols = 0\relax
@@ -6456,7 +6556,7 @@
       \egroup
     \fi
   }%
-  
+
 % If printanswers is true, we print the solution using a TheSolution
 % environment.  If printanswers is false and cancelspace is false,
 % we insert lined vertical space equal to the optional argument (the
@@ -6485,7 +6585,7 @@
       \egroup
     \fi
   }%
-  
+
 % If printanswers is true, we print the solution using a TheSolution
 % environment.  If printanswers is false and cancelspace is false,
 % we insert dotted lined vertical space equal to the optional
@@ -6596,9 +6696,9 @@
 % provided that this notice is left intact.
 %
 % The modifications I made are marked with ``psh'' in a comment:
-% 
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Create framed or shaded regions that can break across pages using 
+% Create framed or shaded regions that can break across pages using
 % \begin{framed} ... \end{framed}    -- ordinary frame box (box at margin)
 % \begin{shaded} ... \end{shaded}    -- shaded background (into margin)
 %    ... leftbar ...                 -- line on left side
@@ -6619,7 +6719,7 @@
 % environment.  If you want to attach some text (a box title) to the
 % frame, then the text should be inserted by \FrameCommand
 %
-% The contents of the framed regions are restricted: 
+% The contents of the framed regions are restricted:
 % Floats, footnotes, marginpars and head-line entries will be lost.
 % (Some of these may be handled in a later version.)
 % This package will not work with the page breaking of multicol.sty,
@@ -6627,9 +6727,9 @@
 %
 % The MakeFramed environment does the work.  Its "settings" argument
 % should contain any adjustments to the text width (applied to \hsize,
-% and using the "\width" of the frame itself) as well as a `restore' 
+% and using the "\width" of the frame itself) as well as a `restore'
 % command -- \@parboxrestore or \FrameRestore or something similar.
-% 
+%
 % Expert commands:
 % \MakeFramed, \endMakeFramed: the "MakeFramed" environment
 % \FrameCommand: command to draw the frame around its argument
@@ -6637,15 +6737,15 @@
 % \FrameRule: length register; \fboxrule for default "framed".
 % \FrameSep: length register; \fboxsep for default "framed".
 % \FrameHeightAdjust: macro; height of frame above baseline at top of page
-% 
+%
 % This is still a `pre-production' version because I can think of many
-% features/improvements that should be made.  Nevertheless, starting 
+% features/improvements that should be made.  Nevertheless, starting
 % with version 0.5 it should be bug-free.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %psh: Commented out \ProvidesPackage:
-%\ProvidesPackage{framed}[2003/07/21 v 0.8a: 
+%\ProvidesPackage{framed}[2003/07/21 v 0.8a:
 %   framed or shaded text with page breaks]
 
 %psh: Created \saved@totalleftmargin and \@sollistdepth:
@@ -6671,7 +6771,7 @@
 
 \def\MakeFramed#1{\par
  % measure added width and height; call result \width and \height
- \setbox\z@\vbox{\vskip-1in \hbox{\hskip-1in 
+ \setbox\z@\vbox{\vskip-1in \hbox{\hskip-1in
    \FrameCommand{\hbox{\vrule \@height .7in \@depth.3in \@width 1in}}}%
    \vskip\z@skip}%
  \def\width{\wd\z@}\def\height{\ht\z@}%
@@ -6679,7 +6779,7 @@
  % insert pre-penalties and skips
  \begingroup
  \skip@\lastskip
- \if@nobreak\else 
+ \if@nobreak\else
     \penalty9999 % updates \page parameters
     \ifdim\pagefilstretch=\z@ \ifdim\pagefillstretch=\z@
        \edef\@tempa{\the\skip@}%
@@ -6689,9 +6789,9 @@
     \penalty\z@
     % Give a stretchy breakpoint that will always be taken in preference
     % to the \penalty 9999 used to update page parameters.  The cube root
-    % of 10000/100 indicates a multiplier of 0.21545, but the maximum 
+    % of 10000/100 indicates a multiplier of 0.21545, but the maximum
     % calculated badness is really 8192, not 10000, so the multiplier
-    % is 0.2301. 
+    % is 0.2301.
     \advance\skip@ \z@ plus-.5\baselineskip
     \advance\skip@ \z@ plus-.231\height
     \advance\skip@ \z@ plus-.231\skip@
@@ -6705,7 +6805,7 @@
  \penalty9999 \vskip -2\baselineskip \vskip-\height
  \penalty9999 % updates \pagetotal
 |\message{After clearout, \pagetotal=\the\pagetotal, \pagegoal=\the\pagegoal. }%
- \fb@adjheight 
+ \fb@adjheight
 %psh: Added commands:
   \advance\hsize-\@totalleftmargin
   \saved@totalleftmargin=\@totalleftmargin
@@ -6740,12 +6840,12 @@
 |     \pagegoal=\the\pagegoal,  \pagetotal=\the\pagetotal. }%
  \ifinner \else
     \dimen@\pagegoal \advance\dimen@-\pagetotal % natural space left on page
-  \ifdim\dimen@<2\baselineskip 
+  \ifdim\dimen@<2\baselineskip
 |   \message{Page has only \the\dimen@\space room left; eject. }%
     \eject \fb@adjheight \put@frame
   \else % there's appreciable room left on the page
 |    \message{\string\pagetotal=\the\pagetotal,
-|        \string\pagegoal=\the\pagegoal, 
+|        \string\pagegoal=\the\pagegoal,
 |        \string\pagestretch=\the\pagestretch,
 |        \string\pageshrink=\the\pageshrink,
 |        \string\fb@frh=\fb@frh. \space}
@@ -6767,7 +6867,7 @@
         \boxmaxdepth\z@ \splittopskip\z@
         \setbox\tw@\vsplit\@tempboxa to\dimen@
         \setbox\tw@\vbox{\unvbox\tw@}% natural-sized
-|       \message{Box of size \the\ht\@tempboxa\space split to \the\dimen@. 
+|       \message{Box of size \the\ht\@tempboxa\space split to \the\dimen@.
 |          Natural height of split box is \the\ht\tw@. }%
         % If the split-to size > (\vsize-\topskip), then set box to full size
         \begingroup
@@ -6796,7 +6896,7 @@
         \unvbox\tw@ \unpenalty\unpenalty
         \ifdim\lastkern=-137sp % whole box went to next page
 |          \message{box split at beginning! }%
-           \egroup \fb@resto@set \eject % (\vskip for frame size was discarded) 
+           \egroup \fb@resto@set \eject % (\vskip for frame size was discarded)
            \fb@adjheight
         \else %
            \egroup \fb@resto@set
@@ -6846,8 +6946,8 @@
 % Height of frame above first baseline when frame starts a page:
 \providecommand\FrameHeightAdjust{6pt}
 
-% \FrameRestore has parts of \@parboxrestore.  See how it is used in the 
-% "settings" argument of \MakeFrame.  Previous behavior can be restored by 
+% \FrameRestore has parts of \@parboxrestore.  See how it is used in the
+% "settings" argument of \MakeFrame.  Previous behavior can be restored by
 % using \@parboxrestore there, or redefining:
 % \makeatletter \renewcommand\FrameRestore{\@parboxrestore} \makeatother
 \def\FrameRestore{%
