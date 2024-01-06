@@ -1,3 +1,13 @@
+> A more up to date version of this class is available on the website
+> of the original author: https://math.mit.edu/~psh/#ExamCls
+>
+> This version is mostly including some modifications I needed at some
+> point, that I did not push upstream since there was not git repository
+> to make a pull request to. I am not the original author of this class,
+> and I do not intend to maintain it. I am just sharing it in case it
+> might be useful to someone else.
+
+
 This is version 2.402 of the exam document class, dated February 10, 2015.
 
 The exam document class, together with its user's guide examdoc.tex,
